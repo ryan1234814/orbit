@@ -616,6 +616,9 @@
 </head>
 
 <body>
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress-bar" class="scroll-progress-bar"></div>
+
     <header>
         <nav>
             <a href="index.html" class="logo-container">
@@ -937,6 +940,32 @@
         // Initialize fetch
         document.addEventListener('DOMContentLoaded', fetchCMSData);
 
+        // Scroll Progress Bar
+        function updateScrollProgress() {
+            const scrollProgressBar = document.getElementById('scroll-progress-bar');
+            if (!scrollProgressBar) return;
+
+            const scrollTop = window.scrollY || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+
+            scrollProgressBar.style.width = scrollPercent + '%';
+        }
+
+        let ticking = false;
+        window.addEventListener('scroll', function () {
+            if (!ticking) {
+                window.requestAnimationFrame(function () {
+                    updateScrollProgress();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        window.addEventListener('resize', updateScrollProgress);
+        updateScrollProgress();
+
         // Mobile nav toggle (same as index.html)
         const navToggle = document.getElementById('nav-toggle');
         const navLinks = document.getElementById('nav-links');
@@ -947,6 +976,7 @@
             });
         }
     </script>
+    <script src="script.js"></script>
 </body>
 
 </html>
